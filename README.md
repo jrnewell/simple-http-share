@@ -31,9 +31,9 @@ Usage: simple-http [options]
 
     -h, --help                output usage information
     -V, --version             output the version number
-    -h, --hostname [address]  Bind to hostname
-    -p, --port [num]          Port Number
-    -i, --interface [num]     Bind to Network Interface
+    -h, --hostname <address>  Bind to hostname
+    -p, --port <num>          Port Number
+    -i, --interface <num>     Bind to Network Interface
     -u, --disable-uploads     Disables the upload file feature
 
 ```
