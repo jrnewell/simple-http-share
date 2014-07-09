@@ -1,5 +1,5 @@
 {
-  "name": "simple-http",
+  "name": "simple-http-share",
   "version": "0.0.1",
   "description": "A simple utility to quickly share or receive files from a directory to other machines over the LAN using HTTP",
   "bin": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jrnewell/simple-http.git"
+    "url": "git://github.com/jrnewell/simple-http-share.git"
   },
   "dependencies" : {
     "connect": "2.9.x",
@@ -17,12 +17,12 @@
     "commander": "*"
   },
   "keywords": [
-    "http", "directory", "index", "simple"
+    "http", "directory", "index", "simple", "share", "quick"
   ],
   "author": "James Newell <james.newell@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jrnewell/simple-http/issues"
+    "url": "https://github.com/jrnewell/simple-http-share/issues"
   },
   "engines": {
     "node": ">=0.8",

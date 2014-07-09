@@ -1,6 +1,6 @@
-# Simple HTTP
+# Simple HTTP Share
 
-Simple HTTP is a small utility to quickly share files from a directory to other machines on the LAN using HTTP (similar to Python's SimpleHTTPServer).  You can also upload files to the host machine as well.
+Simple HTTP Share is a small utility to quickly share files from a directory to other machines on the LAN using HTTP (similar to Python's SimpleHTTPServer).  You can also upload files to the host machine as well.
 
 ![Screen Shot](/img/screen-shot.png?raw=true "Screen Shot")
 
@@ -8,7 +8,7 @@ Simple HTTP is a small utility to quickly share files from a directory to other 
 
 ```shell
 
-npm -g install simple-http
+npm -g install simple-http-share
 
 ```
 
