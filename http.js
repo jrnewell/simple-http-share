@@ -16,8 +16,6 @@ commander
   .option('-u, --disable-uploads', 'Disables the upload file feature', false)
   .parse(process.argv);
 
-console.log("foo: " + commander.disableUploads);
-
 var workingDirectory = process.cwd();
 var hostname = commander.hostname;
 var port = parseInt(commander.port);
