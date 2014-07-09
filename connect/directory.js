@@ -53,7 +53,8 @@ exports = module.exports = function directory(root, options){
   var hidden = options.hidden
     , icons = options.icons
     , filter = options.filter
-    , root = normalize(root);
+    , root = normalize(root)
+    , upload = (options.upload !== null ? options.upload : true);
 
   return function directory(req, res, next) {
     if ('GET' != req.method && 'HEAD' != req.method) return next();
@@ -99,7 +100,7 @@ exports = module.exports = function directory(root, options){
         // content-negotiation
         for (var key in exports) {
           if (~accept.indexOf(key) || ~accept.indexOf('*/*')) {
-            exports[key](req, res, files, directories, next, originalDir, showUp, icons, root);
+            exports[key](req, res, files, directories, next, originalDir, showUp, icons, root, upload);
             return;
           }
         }
@@ -115,12 +116,13 @@ exports = module.exports = function directory(root, options){
  * Respond with text/html.
  */
 
-exports.html = function(req, res, files, directories, next, dir, showUp, icons, root){
+exports.html = function(req, res, files, directories, next, dir, showUp, icons, root, upload){
   fs.readFile(__dirname + '/../public/directory.html', 'utf8', function(err, str){
     if (err) return next(err);
     fs.readFile(__dirname + '/../public/style.css', 'utf8', function(err, style){
       if (err) return next(err);
       if (showUp) files.unshift('..');
+      if (!upload) style += "\n#upload-wrapper {\n  display: none;\n}\n";
       str = str
         .replace('{style}', style)
         .replace('{files}', html(files, directories, dir, icons))

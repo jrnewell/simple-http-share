@@ -110,7 +110,7 @@ connect.createServer(
     connect().use(connect.favicon()),
     connect.static(workingDirectory),
     connect().use(uploadHandler),
-    connect().use(directory(workingDirectory, {icons: true}))
+    connect().use(directory(workingDirectory, {icons: true, upload: !disableUploads}))
 ).listen(port, hostname, function() {
     console.log("http server listening on " + hostname + ":" + port);
     if (hostname === null || hostname === '0.0.0.0') {
