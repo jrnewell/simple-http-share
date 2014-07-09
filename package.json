@@ -1,0 +1,30 @@
+{
+  "name": "simple-http",
+  "version": "0.0.1",
+  "description": "An extension of the node repl that includes history and a callback logger and utility",
+  "bin": {
+    "simple-http": "./http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jrnewell/simple-http.git"
+  },
+  "dependencies" : {
+    "connect": "2.9.x",
+    "cookie-signature": "1.0.1",
+    "bytes": "0.2.0",
+    "formidable": "1.0.x"
+  },
+  "keywords": [
+    "http", "directory", "index", "simple"
+  ],
+  "author": "James Newell <james.newell@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jrnewell/simple-http/issues"
+  },
+  "engines": {
+    "node": ">=0.8",
+    "npm": ">=1.2.10"
+  }
+}
