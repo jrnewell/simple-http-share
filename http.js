@@ -5,27 +5,52 @@ var os = require('os');
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
+var commander = require('commander');
 var directory = require('./connect/directory');
 
-var workingDirectory = process.cwd();
-var port = (process.argv.length > 2) ? parseInt(process.argv[2]) : 8080;
-var ifaceCount = (process.argv.length > 3) ? parseInt(process.argv[3]) : 1;
+commander
+  .version(require('./package.json').version)
+  .option('-h, --hostname [address]', 'Bind to hostname', '0.0.0.0')
+  .option('-p, --port [num]', 'Port Number', 8080)
+  .option('-i, --interface [num]', 'Bind to Network Interface', 0)
+  .parse(process.argv);
 
-var getIPAddress = function() {
+var workingDirectory = process.cwd();
+var hostname = commander.hostname;
+var port = parseInt(commander.port);
+var interfaceIdx = parseInt(commander.interface);
+
+var getIPAddress = function(ifaceIdx) {
     var ifaces = os.networkInterfaces();
-    count = 0;
+    idx = 0;
     for (var dev in ifaces) {
         var iface = ifaces[dev];
         for (var i = 0; i < iface.length; i++) {
             var details = iface[i];
             if (details.family === 'IPv4') {
-                count += 1;
-                if (count == ifaceCount) {
+                idx += 1;
+                if (idx === ifaceIdx) {
                     return details.address.toString();
                 }
             }
         }
     }
+    return '0.0.0.0';
+}
+
+var getAllIPAddress = function() {
+    var result = [];
+    var ifaces = os.networkInterfaces();
+    for (var dev in ifaces) {
+        var iface = ifaces[dev];
+        for (var i = 0; i < iface.length; i++) {
+            var details = iface[i];
+            if (details.family === 'IPv4') {
+                result.push(details.address.toString());
+            }
+        }
+    }
+    return result;
 }
 
 var uploadHandler = function(req, res, next) {
@@ -66,15 +91,26 @@ var uploadHandler = function(req, res, next) {
     next();
 }
 
+// if the user wanted to use a network interface, instead of specifying a hostname
+if (interfaceIdx > 0) {
+    hostname = getIPAddress(interfaceIdx);
+}
+
 connect.createServer(
     connect.logger('short'),
     connect().use(connect.favicon()),
     connect.static(workingDirectory),
     connect().use(uploadHandler),
     connect().use(directory(workingDirectory, {icons: true}))
-).listen(port, function() {
-    console.log("http server listening on " + port);
-    console.log("  ip: " + getIPAddress());
+).listen(port, hostname, function() {
+    console.log("http server listening on " + hostname + ":" + port);
+    if (hostname === null || hostname === '0.0.0.0') {
+        console.log ("  hostnames:");
+        var addresses = getAllIPAddress();
+        for (var i = 0; i < addresses.length; i++) {
+            console.log("    " + addresses[i]);
+        }
+    }
     console.log("  root: " + workingDirectory);
 });
 

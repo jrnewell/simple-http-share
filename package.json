@@ -13,7 +13,8 @@
     "connect": "2.9.x",
     "cookie-signature": "1.0.1",
     "bytes": "0.2.0",
-    "formidable": "1.0.x"
+    "formidable": "1.0.x",
+    "commander": "*"
   },
   "keywords": [
     "http", "directory", "index", "simple"
