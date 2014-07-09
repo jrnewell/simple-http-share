@@ -1,7 +1,7 @@
 {
   "name": "simple-http",
   "version": "0.0.1",
-  "description": "An extension of the node repl that includes history and a callback logger and utility",
+  "description": "A simple utility to share or receive files from a directory over the LAN use HTTP",
   "bin": {
     "simple-http": "./http.js"
   },

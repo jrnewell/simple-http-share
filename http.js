@@ -13,12 +13,14 @@ commander
   .option('-h, --hostname [address]', 'Bind to hostname', '0.0.0.0')
   .option('-p, --port [num]', 'Port Number', 8080)
   .option('-i, --interface [num]', 'Bind to Network Interface', 0)
+  .option('-u, --disable-uploads', 'Disables the upload file feature', false)
   .parse(process.argv);
 
 var workingDirectory = process.cwd();
 var hostname = commander.hostname;
 var port = parseInt(commander.port);
 var interfaceIdx = parseInt(commander.interface);
+var disableUploads = commander.disableUploads;
 
 var getIPAddress = function(ifaceIdx) {
     var ifaces = os.networkInterfaces();
@@ -55,6 +57,13 @@ var getAllIPAddress = function() {
 
 var uploadHandler = function(req, res, next) {
     if (req.url === '/upload' && req.method.toLowerCase() === 'post') {
+        // if uploads are disabled, send back 403
+        if (disableUploads) {
+            res.statusCode = 403;
+            res.end("Forbidden: uploads disabled");
+            return;
+        }
+
         var form = new formidable.IncomingForm();
 
         form.parse(req, function(err, fields, files) {
@@ -105,13 +114,14 @@ connect.createServer(
 ).listen(port, hostname, function() {
     console.log("http server listening on " + hostname + ":" + port);
     if (hostname === null || hostname === '0.0.0.0') {
-        console.log ("  hostnames:");
+        console.log("  hostnames:");
         var addresses = getAllIPAddress();
         for (var i = 0; i < addresses.length; i++) {
             console.log("    " + addresses[i]);
         }
     }
     console.log("  root: " + workingDirectory);
+    console.log("  uploads: " + (disableUploads ? "disabled" : "enabled"));
 });
 
 // graceful ctrl+c shutdown
