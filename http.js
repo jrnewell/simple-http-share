@@ -10,11 +10,13 @@ var directory = require('./connect/directory');
 
 commander
   .version(require('./package.json').version)
-  .option('-h, --hostname [address]', 'Bind to hostname', '0.0.0.0')
-  .option('-p, --port [num]', 'Port Number', 8080)
-  .option('-i, --interface [num]', 'Bind to Network Interface', 0)
+  .option('-h, --hostname <address>', 'Bind to hostname', '0.0.0.0')
+  .option('-p, --port <num>', 'Port Number', 8080)
+  .option('-i, --interface <num>', 'Bind to Network Interface', 0)
   .option('-u, --disable-uploads', 'Disables the upload file feature', false)
   .parse(process.argv);
+
+console.log("foo: " + commander.disableUploads);
 
 var workingDirectory = process.cwd();
 var hostname = commander.hostname;
