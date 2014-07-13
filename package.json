@@ -1,6 +1,6 @@
 {
   "name": "simple-http-share",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple utility to quickly share or receive files from a directory to other machines over the LAN using HTTP",
   "bin": {
     "simple-http": "./http.js"
@@ -11,10 +11,10 @@
   },
   "dependencies" : {
     "connect": "2.9.x",
-    "cookie-signature": "1.0.1",
-    "bytes": "0.2.0",
-    "formidable": "1.0.x",
-    "commander": "*"
+    "cookie-signature": "~1.0.1",
+    "bytes": "~0.2.0",
+    "formidable": "~1.0.15",
+    "commander": "~2.2.0"
   },
   "keywords": [
     "http", "directory", "index", "simple", "share", "quick"
@@ -25,7 +25,7 @@
     "url": "https://github.com/jrnewell/simple-http-share/issues"
   },
   "engines": {
-    "node": ">=0.8",
-    "npm": ">=1.2.10"
+    "node": ">=0.10",
+    "npm": ">=1.4"
   }
 }
