@@ -7,7 +7,7 @@ var util = require('util');
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
-var EasyZip = require('easy-zip').EasyZip;
+var EasyZip = require('./easy-zip').EasyZip;
 var commander = require('commander');
 var directory = require('./connect/directory');
 
@@ -72,7 +72,7 @@ var zipFolderHandler = function(req, res, next) {
                 return;
             }
 
-            easyZip.zipFolder(targetPath, function() {
+            easyZip.zipFolder(targetPath, showHidden, function() {
                 var folderName = path.basename(targetPath).replace(/[\/\\]/g, "");
                 if (!folderName || folderName.length === 0) {
                     folderName = "folder";
