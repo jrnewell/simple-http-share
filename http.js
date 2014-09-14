@@ -4,7 +4,10 @@ var connect = require('connect');
 var os = require('os');
 var formidable = require('formidable');
 var util = require('util');
+var url = require('url');
 var fs = require('fs');
+var path = require('path');
+var EasyZip = require('easy-zip').EasyZip;
 var commander = require('commander');
 var directory = require('./connect/directory');
 
@@ -13,6 +16,7 @@ commander
   .option('-h, --hostname <address>', 'Bind to hostname', '0.0.0.0')
   .option('-p, --port <num>', 'Port Number', 8080)
   .option('-i, --interface <num>', 'Bind to Network Interface', 0)
+  .option('-s, --show-hidden-files', 'Shows hidden files in directory', false)
   .option('-u, --disable-uploads', 'Disables the upload file feature', false)
   .parse(process.argv);
 
@@ -20,6 +24,7 @@ var workingDirectory = process.cwd();
 var hostname = commander.hostname;
 var port = parseInt(commander.port);
 var interfaceIdx = parseInt(commander.interface);
+var showHidden = commander.showHiddenFiles
 var disableUploads = commander.disableUploads;
 
 var getIPAddress = function(ifaceIdx) {
@@ -55,6 +60,31 @@ var getAllIPAddress = function() {
     return result;
 }
 
+var zipFolderHandler = function(req, res, next) {
+    if (url.parse(req.url).pathname === '/zipfolder' && req.method.toLowerCase() === 'get' && req.query && req.query.target) {
+        var easyZip = new EasyZip();
+        var targetPath = path.normalize(path.join(workingDirectory, req.query.target));
+
+        fs.exists(targetPath, function(exists) {
+            if (!exists) {
+                res.statusCode = 404;
+                res.end("Unknown path");
+                return;
+            }
+
+            easyZip.zipFolder(targetPath, function() {
+                var folderName = path.basename(targetPath).replace(/[\/\\]/g, "");
+                if (!folderName || folderName.length === 0) {
+                    folderName = "folder";
+                }
+                easyZip.writeToResponse(res, folderName);
+            });
+        });
+        return;
+    }
+    next();
+}
+
 var uploadHandler = function(req, res, next) {
     if (req.url === '/upload' && req.method.toLowerCase() === 'post') {
         // if uploads are disabled, send back 403
@@ -75,7 +105,7 @@ var uploadHandler = function(req, res, next) {
             }
 
             var inStream = fs.createReadStream(files.upload.path);
-            var outStream = fs.createWriteStream(workingDirectory + "/" + files.upload.name);
+            var outStream = fs.createWriteStream(path.join(workingDirectory, files.upload.name));
 
             inStream.pipe(outStream);
             inStream.on('end', function() {
@@ -105,13 +135,16 @@ if (interfaceIdx > 0) {
     hostname = getIPAddress(interfaceIdx);
 }
 
-connect.createServer(
-    connect.logger('short'),
-    connect().use(connect.favicon()),
-    connect.static(workingDirectory),
-    connect().use(uploadHandler),
-    connect().use(directory(workingDirectory, {icons: true, upload: !disableUploads}))
-).listen(port, hostname, function() {
+connect.logger('short');
+var server = connect.createServer()
+    .use(connect.query())
+    .use(connect.favicon())
+    .use(connect.static(workingDirectory))
+    .use(uploadHandler)
+    .use(zipFolderHandler)
+    .use(directory(workingDirectory, {icons: true, hidden: showHidden, upload: !disableUploads}))
+
+server.listen(port, hostname, function() {
     console.log("http server listening on " + hostname + ":" + port);
     if (hostname === null || hostname === '0.0.0.0') {
         console.log("  hostnames:");

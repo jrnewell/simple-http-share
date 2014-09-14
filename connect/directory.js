@@ -17,6 +17,7 @@
 var fs = require('fs')
   , parse = require('url').parse
   , utils = require('./utils')
+  , querystring = require('querystring')
   , path = require('path')
   , normalize = path.normalize
   , extname = path.extname
@@ -128,6 +129,7 @@ exports.html = function(req, res, files, directories, next, dir, showUp, icons, 
         .replace('{files}', html(files, directories, dir, icons))
         .replace('{directory}', dir)
         .replace('{linked-path}', htmlPath(dir))
+        .replace('{urlenc-directory}', querystring.escape(dir))
         .replace('{root}', root);
       res.setHeader('Content-Type', 'text/html');
       res.setHeader('Content-Length', str.length);

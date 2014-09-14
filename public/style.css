@@ -170,7 +170,7 @@ ul#files li a.hidden {
   display: none;
 }
 
-#upload-wrapper {
+#upload-wrapper, #download-zip-btn {
   margin-bottom: 15px;
 }
 
@@ -179,14 +179,22 @@ ul#files li a.hidden {
   display: none;
 }
 
-#upload-btn {
+#download-zip-wrapper a:focus,
+#download-zip-wrapper a:hover,
+#upload-wrapper a:focus,
+#upload-wrapper a:hover {
+  background: rgba(255,255,255,0.65);
+  color: #B4B4B4;
+}
+
+#upload-btn, #download-zip-btn {
   position: relative;
   display: block;
   text-indent: 30px;
   font-family: 'Courier New';
 }
 
-#upload-btn img {
+#upload-btn img, #download-zip-btn img {
   position: absolute;
   left: 5px;
 }
