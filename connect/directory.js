@@ -75,7 +75,7 @@ exports = module.exports = function directory(root, options){
     if (0 != path.indexOf(root)) return next(utils.error(403));
 
     // check if we have a directory
-    fs.stat(path, function(err, stat){
+    fs.stat(path, function(err, stat) {
       if (err) return 'ENOENT' == err.code
         ? next()
         : next(err);
@@ -83,11 +83,26 @@ exports = module.exports = function directory(root, options){
       if (!stat.isDirectory()) return next();
 
       // fetch files
-      fs.readdir(path, function(err, files){
+      fs.readdir(path, function(err, files) {
         if (err) return next(err);
         if (!hidden) files = removeHidden(files);
         if (filter) files = files.filter(filter);
-        files.sort();
+        files.sort(compare);
+
+        function compare(f1, f2) {
+          var stat1 = fs.statSync(f1);
+          var stat2 = fs.statSync(f2);
+          if (stat1.isDirectory() && !stat2.isDirectory()) {
+            return -1;
+          }
+          else if (!stat1.isDirectory() && stat2.isDirectory()) {
+            return 1;
+          }
+
+          var str1 = f1.toString().toLowerCase();
+          var str2 = f2.toString().toLowerCase();
+          return str1.localeCompare(str2);
+        }
 
         directories = [];
         for (var i = 0; i < files.length; i++) {
