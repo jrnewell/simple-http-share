@@ -25,7 +25,7 @@ function toArrayBuffer(buffer) {
 
 EasyZip.prototype.addFile = function(file, filePath, callback) {
     var datas = [],
-        me = this,
+        self = this,
         err = null,
         rs = fs.createReadStream(filePath);
 
@@ -39,7 +39,7 @@ EasyZip.prototype.addFile = function(file, filePath, callback) {
 
     rs.on('end', function() {
         var buf = Buffer.concat(datas);
-        me.file(file, toArrayBuffer(buf), {
+        self.file(file, toArrayBuffer(buf), {
             base64: false,
             binary: true
         });
@@ -48,41 +48,41 @@ EasyZip.prototype.addFile = function(file, filePath, callback) {
 }
 
 EasyZip.prototype.batchAdd = function(files, callback) {
-    var me = this;
+    var self = this;
     async.each(files, function(item, callback) {
         var source = item.source,
             target = item.target,
-            appender = me,
+            appender = self,
             folder = item.folder,
             fileName = path.basename(target),
             dirname = path.dirname(target);
 
         if (dirname != '.') {
-            appender = me.folder(dirname);
+            appender = self.folder(dirname);
         }
 
         if (source != null && source.trim() != '') {
             appender.addFile(fileName, source, callback);
         } else {
             // if no source, make the target as folder
-            me.folder(target);
+            self.folder(target);
             callback();
         }
 
     }, function(err) {
-        callback(err, me);
+        callback(err, self);
     });
 }
 
 
 EasyZip.prototype.zipFolder = function(folder, hidden, callback) {
-    var me = this;
+    var self = this;
 
     fs.exists(folder, function(exists) {
-        if (!exists) return callback(new Error('Folder not found'), me);
+        if (!exists) return callback(new Error('Folder not found'), self);
 
         fs.readdir(folder, function(err, files) {
-            if (err) return callback(err, me);
+            if (err) return callback(err, self);
 
             var rootFolder = path.basename(folder),
                 zips = [];
@@ -129,8 +129,8 @@ EasyZip.prototype.zipFolder = function(folder, hidden, callback) {
                 function(err) {
                     if (err) return callback(err);
 
-                    me.batchAdd(zips, function(err) {
-                        callback(err, me)
+                    self.batchAdd(zips, function(err) {
+                        callback(err, self)
                     });
                 }
             );
@@ -157,7 +157,7 @@ EasyZip.prototype.writeToFile = function(filePath, callback) {
     fs.writeFile(filePath, data, 'binary', callback);
 }
 
-EasyZip.prototype.writeToFileSycn = function(filePath) {
+EasyZip.prototype.writeToFileSync = function(filePath) {
     var data = this.generate({
         base64: false,
         compression: 'DEFLATE'
