@@ -72,7 +72,13 @@ var zipFolderHandler = function(req, res, next) {
                 return;
             }
 
-            easyZip.zipFolder(targetPath, showHidden, function() {
+            easyZip.zipFolder(targetPath, showHidden, function(err) {
+                if (err) {
+                    res.statusCode = 500;
+                    res.end(err.toString());
+                    return;
+                }
+
                 var folderName = path.basename(targetPath).replace(/[\/\\]/g, "");
                 if (!folderName || folderName.length === 0) {
                     folderName = "folder";
@@ -154,6 +160,7 @@ server.listen(port, hostname, function() {
         }
     }
     console.log("  root: " + workingDirectory);
+    console.log("  showHidden: " + (showHidden ? "yes" : "no"));
     console.log("  uploads: " + (disableUploads ? "disabled" : "enabled"));
 });
 
