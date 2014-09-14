@@ -7,24 +7,19 @@ Simple HTTP Share is a small utility to quickly share files from a directory to 
 ## Installation
 
 ```shell
-
 npm -g install simple-http-share
-
 ```
 
 ## Usage
 
 ```shell
-
 $ cd directory/to/share
 $ simple-http
-
 ```
 
 ## Optional Arguments
 
 ```
-
 Usage: simple-http [options]
 
   Options:
@@ -36,7 +31,6 @@ Usage: simple-http [options]
     -i, --interface <num>     Bind to Network Interface
     -s, --show-hidden-files   Shows hidden files in directory
     -u, --disable-uploads     Disables the upload file feature
-
 ```
 
 ## License
