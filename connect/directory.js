@@ -90,8 +90,8 @@ exports = module.exports = function directory(root, options){
         files.sort(compare);
 
         function compare(f1, f2) {
-          var stat1 = fs.statSync(f1);
-          var stat2 = fs.statSync(f2);
+          var stat1 = fs.statSync(join(path, f1));
+          var stat2 = fs.statSync(join(path, f2));
           if (stat1.isDirectory() && !stat2.isDirectory()) {
             return -1;
           }
