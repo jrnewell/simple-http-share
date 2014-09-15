@@ -7,7 +7,7 @@ var util = require('util');
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
-var EasyZip = require('./easy-zip').EasyZip;
+var EasyZip = require('easy-zip2').EasyZip;
 var commander = require('commander');
 var directory = require('./connect/directory');
 
