@@ -26,6 +26,7 @@ Usage: simple-http [options]
 
     -h, --help                output usage information
     -V, --version             output the version number
+    -a, --auth <password>     Protect with basic HTTP auth
     -h, --hostname <address>  Bind to hostname
     -p, --port <num>          Port Number
     -i, --interface <num>     Bind to Network Interface

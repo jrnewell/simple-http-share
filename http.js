@@ -13,6 +13,7 @@ var directory = require('./connect/directory');
 
 commander
   .version(require('./package.json').version)
+  .option('-a, --auth <password>', 'Protect with basic HTTP auth')
   .option('-h, --hostname <address>', 'Bind to hostname', '0.0.0.0')
   .option('-p, --port <num>', 'Port Number', 8080)
   .option('-i, --interface <num>', 'Bind to Network Interface', 0)
@@ -21,6 +22,7 @@ commander
   .parse(process.argv);
 
 var workingDirectory = process.cwd();
+var authPassword = commander.auth;
 var hostname = commander.hostname;
 var port = parseInt(commander.port);
 var interfaceIdx = parseInt(commander.interface);
@@ -142,7 +144,16 @@ if (interfaceIdx > 0) {
 }
 
 connect.logger('short');
-var server = connect.createServer()
+var server = connect.createServer();
+
+// enable basic http auth if given a password (don't care about the user)
+if (typeof authPassword !== 'undefined' && authPassword) {
+    server.use(connect.basicAuth(function(user, pass){
+        return pass === authPassword;
+    }));
+}
+
+server
     .use(connect.query())
     .use(connect.favicon())
     .use(connect.static(workingDirectory))
@@ -160,6 +171,7 @@ server.listen(port, hostname, function() {
         }
     }
     console.log("  root: " + workingDirectory);
+    console.log("  basic auth: " + (authPassword ? "enabled" : "disabled"));
     console.log("  showHidden: " + (showHidden ? "yes" : "no"));
     console.log("  uploads: " + (disableUploads ? "disabled" : "enabled"));
 });
