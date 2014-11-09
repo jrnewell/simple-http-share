@@ -178,7 +178,7 @@ server.listen(port, hostname, function() {
 
 // graceful ctrl+c shutdown
 var readLine = require("readline");
-if (process.platform === "win32"){
+if (process.platform === "win32") {
     var rl = readLine.createInterface({
         input: process.stdin,
         output: process.stdout

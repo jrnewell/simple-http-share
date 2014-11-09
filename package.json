@@ -1,6 +1,6 @@
 {
   "name": "simple-http-share",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A simple utility to quickly share or receive files from a directory to other machines over the LAN using HTTP",
   "bin": {
     "simple-http": "./http.js"
@@ -16,7 +16,8 @@
     "formidable": "~1.0.15",
     "commander": "~2.2.0",
     "async": "~0.9.0",
-    "easy-zip2": "~0.0.3"
+    "easy-zip2": "~0.0.3",
+    "fswin": "~2.14.1109"
   },
   "keywords": [
     "http", "directory", "index", "simple", "share", "quick"

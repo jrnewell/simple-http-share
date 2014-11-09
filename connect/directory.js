@@ -21,7 +21,8 @@ var fs = require('fs')
   , path = require('path')
   , normalize = path.normalize
   , extname = path.extname
-  , join = path.join;
+  , join = path.join
+  , fswin = require('fswin');
 
 /*!
  * Icon cache.
@@ -46,7 +47,7 @@ var cache = {};
  * @api public
  */
 
-exports = module.exports = function directory(root, options){
+exports = module.exports = function directory(root, options) {
   options = options || {};
 
   // root required
@@ -87,6 +88,14 @@ exports = module.exports = function directory(root, options){
         if (err) return next(err);
         if (!hidden) files = removeHidden(files);
         if (filter) files = files.filter(filter);
+
+        // skip special folders in windows
+        if (process.platform === "win32") {
+          files = files.filter(function(file) {
+            return (file !== "System Volume Information");
+          });
+        }
+
         files.sort(compare);
 
         function compare(f1, f2) {
@@ -244,9 +253,17 @@ function load(icon) {
  */
 
 function removeHidden(files) {
-  return files.filter(function(file){
-    return '.' != file[0];
-  });
+  var filterFunc;
+  if (process.platform === "win32") {
+    filterFunc = function(file) {
+      var attrib = fswin.getAttributesSync(file);
+      return (attrib != null ? !attrib.IS_HIDDEN : false);
+    }
+  }
+  else {
+    filterFunc = function(file) { return '.' != file[0]; }
+  }
+  return files.filter(filterFunc);
 }
 
 /**
