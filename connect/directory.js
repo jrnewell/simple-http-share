@@ -86,7 +86,7 @@ exports = module.exports = function directory(root, options) {
       // fetch files
       fs.readdir(path, function(err, files) {
         if (err) return next(err);
-        if (!hidden) files = removeHidden(files);
+        if (!hidden) files = removeHidden(path, files);
         if (filter) files = files.filter(filter);
 
         // skip special folders in windows
@@ -252,11 +252,12 @@ function load(icon) {
  * @api private
  */
 
-function removeHidden(files) {
+function removeHidden(_path, files) {
   var filterFunc;
   if (process.platform === "win32") {
     filterFunc = function(file) {
-      var attrib = fswin.getAttributesSync(file);
+      var fullPath = path.join(_path, file);
+      var attrib = fswin.getAttributesSync(fullPath);
       return (attrib != null ? !attrib.IS_HIDDEN : false);
     }
   }
