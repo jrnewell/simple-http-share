@@ -21,8 +21,7 @@ var fs = require('fs')
   , path = require('path')
   , normalize = path.normalize
   , extname = path.extname
-  , join = path.join
-  , fswin = require('fswin');
+  , join = path.join;
 
 /*!
  * Icon cache.
@@ -257,7 +256,7 @@ function removeHidden(_path, files) {
   if (process.platform === "win32") {
     filterFunc = function(file) {
       var fullPath = path.join(_path, file);
-      var attrib = fswin.getAttributesSync(fullPath);
+      var attrib = require('fswin').getAttributesSync(fullPath);
       return (attrib != null ? !attrib.IS_HIDDEN : false);
     }
   }
