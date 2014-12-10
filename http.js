@@ -156,7 +156,7 @@ if (typeof authPassword !== 'undefined' && authPassword) {
 server
     .use(connect.query())
     .use(connect.favicon())
-    .use(connect.static(workingDirectory))
+    .use(connect.static(workingDirectory, {hidden: showHidden}))
     .use(uploadHandler)
     .use(zipFolderHandler)
     .use(directory(workingDirectory, {icons: true, hidden: showHidden, upload: !disableUploads}))

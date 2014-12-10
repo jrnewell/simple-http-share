@@ -205,7 +205,6 @@ function html(files, directories, dir, useIcons) {
     var icon = ''
       , classes = [];
 
-
     if (useIcons && '..' != file) {
         // special icon for directories
         if (directories.indexOf(file) >= 0) {
