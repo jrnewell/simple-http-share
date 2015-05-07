@@ -143,8 +143,7 @@ if (interfaceIdx > 0) {
     hostname = getIPAddress(interfaceIdx);
 }
 
-connect.logger('short');
-var server = connect.createServer();
+var server = connect();
 
 // enable basic http auth if given a password (don't care about the user)
 if (typeof authPassword !== 'undefined' && authPassword) {
@@ -156,6 +155,7 @@ if (typeof authPassword !== 'undefined' && authPassword) {
 server
     .use(connect.query())
     .use(connect.favicon())
+    .use(connect.logger('short'))
     .use(connect.static(workingDirectory, {hidden: showHidden}))
     .use(uploadHandler)
     .use(zipFolderHandler)
