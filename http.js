@@ -18,7 +18,9 @@ commander
   .option('-p, --port <num>', 'Port Number', 8080)
   .option('-i, --interface <num>', 'Bind to Network Interface', 0)
   .option('-s, --show-hidden-files', 'Shows hidden files in directory', false)
+  .option('-q, --quiet', 'Don\'t log http requests', false)
   .option('-u, --disable-uploads', 'Disables the upload file feature', false)
+  .option('-v, --verbose', 'Log more verbose http requests', false)
   .parse(process.argv);
 
 var workingDirectory = process.cwd();
@@ -154,12 +156,18 @@ if (typeof authPassword !== 'undefined' && authPassword) {
 
 server
     .use(connect.query())
-    .use(connect.favicon())
-    .use(connect.logger('short'))
+    .use(connect.favicon());
+
+if (!commander.quiet) {
+    var format = commander.verbose ? 'default' : 'short';
+    server.use(connect.logger(format))
+}
+
+server
     .use(connect.static(workingDirectory, {hidden: showHidden}))
     .use(uploadHandler)
     .use(zipFolderHandler)
-    .use(directory(workingDirectory, {icons: true, hidden: showHidden, upload: !disableUploads}))
+    .use(directory(workingDirectory, {icons: true, hidden: showHidden, upload: !disableUploads}));
 
 server.listen(port, hostname, function() {
     console.log("http server listening on " + hostname + ":" + port);
