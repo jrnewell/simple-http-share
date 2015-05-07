@@ -164,7 +164,7 @@ if (!commander.quiet) {
 }
 
 server
-    .use(connect.static(workingDirectory, {hidden: showHidden}))
+    .use(connect.static(workingDirectory, {dotfiles: (showHidden ? 'allow' : 'ignore')}))
     .use(uploadHandler)
     .use(zipFolderHandler)
     .use(directory(workingDirectory, {icons: true, hidden: showHidden, upload: !disableUploads}));
