@@ -256,7 +256,7 @@ function removeHidden(_path, files) {
     filterFunc = function(file) {
       var fullPath = path.join(_path, file);
       var attrib = require('fswin').getAttributesSync(fullPath);
-      if (attrib != null)
+      if (attrib !== null) {
         if (attrib.IS_HIDDEN) {
           return false;
         }
