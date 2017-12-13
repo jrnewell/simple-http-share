@@ -155,7 +155,7 @@ exports.html = function(req, res, files, directories, next, dir, showUp, icons, 
         .replace('{urlenc-directory}', querystring.escape(dir))
         .replace('{root}', root);
       res.setHeader('Content-Type', 'text/html');
-      res.setHeader('Content-Length', str.length);
+      res.setHeader('Content-Length', Buffer.byteLength(str, 'utf8'));
       res.end(str);
     });
   });
