@@ -1,6 +1,6 @@
 {
   "name": "simple-http-share",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A simple utility to quickly share or receive files from a directory to other machines over the LAN using HTTP",
   "bin": {
     "simple-http": "./http.js"
